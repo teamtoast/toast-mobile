@@ -1,21 +1,31 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import {createStackNavigator} from "react-navigation";
+import Home from "./components/home/Home";
+import StudyCategory from "./components/studyCategory/StudyCategory";
+import Login from "./components/login/Login";
+import {StyleSheet,View} from "react-native";
 
-export default class App extends React.Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text>Hello</Text>
-      </View>
-    );
-  }
-}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const RootStack = createStackNavigator(
+    {
+        Home: {screen: Home},
+        StudyCategory: {screen: StudyCategory},
+        Login: {screen: Login},
+
+    },
+    {
+        initialRouteName: 'Home',
+    }
+);
+
+
+class App extends React.Component {
+    render() {
+        return (
+                <RootStack />
+        );
+    }
+};
+
+
+export default App;
