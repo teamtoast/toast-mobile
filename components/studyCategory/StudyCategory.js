@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Text, View, ScrollView, Button, Image} from "react-native";
+import {Text, TouchableOpacity,View, ScrollView, Button, Image, StyleSheet} from "react-native";
 
 class StudyCategory extends React.Component {
     static navigationOptions = {
@@ -50,16 +50,18 @@ class StudyCategory extends React.Component {
     render() {
         let StudyCategoryList = this.state.categories.map((StudyCategory, i) =>
 
-            <View key={i}>
-                <Text>{StudyCategory.categoryName}</Text>
+            <View style={styles.category} key={i}>
+                <TouchableOpacity onPress={() => {
+                    this.props.navigation.navigate('StudyroomList', {categoryID: StudyCategory.categoryID});
+                }}>
+                    <Text>{StudyCategory.categoryName}</Text>
 
-                {StudyCategory.parentName !== '자유주제' ?
-                    <Text>{StudyCategory.parentName}</Text>
-                    : <Image source={require('./img/logo-card.png')}/>
-                }
+                    {StudyCategory.parentName !== '자유주제' ?
+                        <Text>{StudyCategory.parentName}</Text>
+                        : <Image source={require('./img/logo-card.png')}/>
+                    }
+                </TouchableOpacity>
 
-                <Button title={"Go To"}
-                        onPress={() => {this.props.navigation.navigate('StudyroomList',{ categoryID: StudyCategory.categoryID});}}/>
                 {/*<View>*/}
                 {/*<Text>{StudyCategory.categoryName}</Text>*/}
                 {/*<Text>{StudyCategory.categoryName + "에 관한 다양한 주제들로 함께 스피킹 스터디해요!"}</Text>*/}
@@ -73,14 +75,30 @@ class StudyCategory extends React.Component {
         // );
 
         return (
-            <View>
-                <Text>어떤 주제로 스터디해볼까요?</Text>
+            <View style={styles.container}>
+                <Text style={styles.title}>어떤 주제로 스터디해볼까요?</Text>
                 <Text>스터디 카테고리 리스트</Text>
 
-                <View>{StudyCategoryList}</View>
+                <View style={styles.categoryList}>{StudyCategoryList}</View>
             </View>
         );
     }
-}
+};
+
+const styles = StyleSheet.create({
+    container: {
+        backgroundColor: "#ffffff",
+    },
+    title: {
+        fontSize: 20
+    },
+    categoryList: {},
+    category: {
+        borderRadius: 4,
+        borderColor: '#e6e6e6',
+        borderWidth: 1,
+        marginBottom: 10
+    }
+});
 
 export default StudyCategory;
