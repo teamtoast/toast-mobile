@@ -1,5 +1,5 @@
 import React from "react";
-import {Text, View, Image, Button, TextInput, StyleSheet, ScrollView} from "react-native";
+import {Text, View, Image, Button, TextInput, StyleSheet, ScrollView, TouchableOpacity} from "react-native";
 
 class Login extends React.Component {
     static navigationOptions = {
@@ -14,9 +14,14 @@ class Login extends React.Component {
 
                     <View style={styles.loginBox}>
                         {/*facebook login*/}
-                        <Image source={require('./img/button-facebook-login.png')}/>
+                        <TouchableOpacity onClick={() => {}}>
+                            <Image source={require('./img/button-facebook-login.png')}/>
+                        </TouchableOpacity>
+
                         {/*google login*/}
-                        <Image source={require('./img/button-google-login.png')}/>
+                        <TouchableOpacity onClick={() => {}}>
+                            <Image source={require('./img/button-google-login.png')}/>
+                        </TouchableOpacity>
 
                         <View style={styles.inLine}>
                             <View style={styles.Line}/>
@@ -36,17 +41,18 @@ class Login extends React.Component {
                         {/*<label htmlFor="login-status" className="\-">로그인 상태 유지하기</label>*/}
                         {/*</View>*/}
 
-                        <Button title={'로그인'} onPress={() => {}}/>
-                        {/*<button  className="Button_Login">*/}
-                        {/*/!*<img src={require('./img/button-login@3x.png')}*!/*/}
-                        {/*/!*className="Button_Login"*!/*/}
-                        {/*/!*onClick={this.handleSubmit} alt=""/>*!/*/}
-                        {/*</button>*/}
-                        {/*</div>*/}
-                        {/*<br/>*/}
+                        <TouchableOpacity>
+                            <Image source={require('./img/button-login.png')}
+                                   style={styles.buttonLogin}/>
+                        </TouchableOpacity>
+
                     </View>
                     <Text style={styles.desc}>계정이 없으신가요?</Text>
-                    <Button title={'TOAST 회원가입하기'} onPress={() => {}} style={styles.registerLink}/>
+                    <Button title={'TOAST 회원가입하기'}
+                            onPress={() => {
+                                this.props.navigation.navigate('Register');
+                            }}
+                            style={styles.registerLink}/>
                 </View>
             </ScrollView>
         );
@@ -78,7 +84,8 @@ const styles = StyleSheet.create({
             fontSize: 13,
             letterSpacing: -0.2,
             color: '#4a4a4a',
-            width: 296
+            width: 296,
+            paddingLeft: 10
         },
         inputType: {
             textAlign: 'left',
