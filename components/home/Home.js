@@ -1,10 +1,8 @@
 import React from "react";
 import {Button, Text, View} from "react-native";
+import {LogoTitle} from "../logoTitle/LogoTitle";
 
 class Home extends React.Component {
-    static navigationOptions = {
-        title: 'Home',
-    };
 
     render() {
         return (

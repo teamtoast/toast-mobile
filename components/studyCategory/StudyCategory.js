@@ -1,12 +1,12 @@
 import React, {Component} from "react";
-import {Text, TouchableOpacity,View, ScrollView, Button, Image, StyleSheet} from "react-native";
+import {Text, TouchableOpacity, View, ScrollView, Button, Image, StyleSheet} from "react-native";
+import {AppLoading, Font} from "expo";
+import {LogoTitle} from "../logoTitle/LogoTitle";
 
 class StudyCategory extends React.Component {
-    static navigationOptions = {
-        title: 'StudyCategory',
-    };
 
     state = {
+        fontLoaded: false,
         categories: [
             {
                 "categoryID": 1,
@@ -47,40 +47,54 @@ class StudyCategory extends React.Component {
         ]
     }
 
+    componentWillMount() {
+        Font.loadAsync({
+            'noto-sans-regular': require('../assets/fonts/Noto_Sans/NotoSans-Regular.ttf'),
+        });
+    }
+
+    async componentDidMount() {
+        await Font.loadAsync({
+            'noto-sans-regular': require('../assets/fonts/Noto_Sans/NotoSans-Regular.ttf'),
+        });
+
+        this.setState({fontLoaded: true});
+    }
+
     render() {
         let StudyCategoryList = this.state.categories.map((StudyCategory, i) =>
 
-            <View style={styles.category} key={i}>
-                <TouchableOpacity onPress={() => {
-                    this.props.navigation.navigate('StudyroomList', {categoryID: StudyCategory.categoryID});
-                }}>
-                    <Text>{StudyCategory.categoryName}</Text>
-
+            <TouchableOpacity key={i} onPress={() => {
+                this.props.navigation.navigate('StudyroomList', {categoryID: StudyCategory.categoryID});
+            }}>
+                <View style={styles.category} key={i}>
                     {StudyCategory.parentName !== '자유주제' ?
                         <Text>{StudyCategory.parentName}</Text>
-                        : <Image source={require('./img/logo-card.png')}/>
+                        : null
                     }
-                </TouchableOpacity>
-
-                {/*<View>*/}
-                {/*<Text>{StudyCategory.categoryName}</Text>*/}
-                {/*<Text>{StudyCategory.categoryName + "에 관한 다양한 주제들로 함께 스피킹 스터디해요!"}</Text>*/}
-                {/*/!*<img src={require('./img/button-next-category@3x.png')}*!/*/}
-                {/*/!*className="Button_Next_Category" alt=""/>*!/*/}
-                {/*</View>*/}
-            </View>
+                    <Text style={styles.categoryName}>{StudyCategory.categoryName}</Text>
+                </View>
+            </TouchableOpacity>
         );
         // return (
         //     <View>{StudyCategoryList}</View>
         // );
 
         return (
-            <View style={styles.container}>
-                <Text style={styles.title}>어떤 주제로 스터디해볼까요?</Text>
-                <Text>스터디 카테고리 리스트</Text>
+            <View>
+                {
+                    this.state.fontLoaded ? (
+                        <View style={styles.container}>
+                            <Text style={styles.title}>어떤 주제로 스터디해볼까요?</Text>
+                            <Text style={styles.subtitle}>스터디 카테고리 리스트</Text>
 
-                <View style={styles.categoryList}>{StudyCategoryList}</View>
+                            <View style={styles.categoryList}>{StudyCategoryList}</View>
+                        </View>
+                    ) : null
+                }
             </View>
+
+
         );
     }
 };
@@ -88,16 +102,59 @@ class StudyCategory extends React.Component {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: "#ffffff",
+        paddingVertical: 28,
+        paddingHorizontal: 16,
+        height: '100%'
     },
     title: {
-        fontSize: 20
+        width: 189,
+        height: 21,
+        fontSize: 15,
+        fontWeight: "500",
+        fontStyle: "normal",
+        letterSpacing: -0.21,
+        color: "#4a4a4a",
+        fontFamily: 'noto-sans-regular',
+        marginBottom: 25
     },
-    categoryList: {},
+    subtitle: {
+        width: 106,
+        height: 18,
+        fontSize: 11,
+        fontWeight: "500",
+        fontStyle: "normal",
+        letterSpacing: -0.16,
+        color: "#888888",
+        fontFamily: 'noto-sans-regular',
+        marginBottom: 9
+    },
+    categoryList: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        alignItems: 'center',
+        justifyContent: "center",
+
+    },
     category: {
-        borderRadius: 4,
+        width: 158,
+        height: 135,
+        borderRadius: 8,
         borderColor: '#e6e6e6',
         borderWidth: 1,
-        marginBottom: 10
+        marginBottom: 10,
+        alignItems: "center",
+        justifyContent: "center",
+        marginHorizontal: 6
+
+
+    },
+    categoryName: {
+        fontFamily: "noto-sans-regular",
+        fontSize: 14,
+        fontWeight: "500",
+        fontStyle: "normal",
+        letterSpacing: -0.2,
+        textAlign: "center",
     }
 });
 

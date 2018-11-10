@@ -1,15 +1,29 @@
 import React, {Component} from "react";
-import {Text,TextInput, View, ScrollView, Button, Image, StyleSheet, TouchableOpacity, Modal} from "react-native";
+import {Text, TextInput, View, ScrollView, Button, Image, StyleSheet, TouchableOpacity, Modal} from "react-native";
+import StudyCategory from "../studyCategory/StudyCategory";
 
 
 class StudyroomList extends React.Component {
-    static navigationOptions = {
-        title: 'StudyroomList',
-    };
 
     state = {
         categoryID: this.props.navigation.getParam('categoryID'),
         studyroomList: [
+            {
+                studyroomID: 1,
+                studyroomState: 'start',
+                studyroomTitle: "공부같이 해요",
+                studyroomMaxUser: 4,
+                studyroomTime: 35,
+                studyroomMinLevel: 2
+            },
+            {
+                studyroomID: 1,
+                studyroomState: 'pending',
+                studyroomTitle: "취업준비해요",
+                studyroomMaxUser: 4,
+                studyroomTime: 35,
+                studyroomMinLevel: 2
+            },
             {
                 studyroomID: 1,
                 studyroomState: 'start',
@@ -21,7 +35,7 @@ class StudyroomList extends React.Component {
             {
                 studyroomID: 1,
                 studyroomState: 'pending',
-                studyroomTitle: "공부해요",
+                studyroomTitle: "취업준비해요",
                 studyroomMaxUser: 4,
                 studyroomTime: 35,
                 studyroomMinLevel: 2
@@ -62,161 +76,166 @@ class StudyroomList extends React.Component {
 
 
         let listItems = this.state.studyroomList.map((studyRoom, i) =>
-            <View key={i} style={styles.studyRoom}>
-                <View
-                    style={[styles.studyRoomHeader, studyRoom.studyroomState === "start" ? styles.studyRoomActive : null]}>
-                    <Text style={styles.studyRoomState}>{studyRoom.state === "pending" ? '대기중' : '진행중'}</Text>
+            <TouchableOpacity
+                onPress={()=> {
+                    if(studyRoom.studyroomState === "pending")
+                        this.props.navigation.navigate('StudyroomStart', {studyroomID: studyRoom.studyroomID});
+                    else {
+
+                    }
+                }}
+                key={i} style={styles.studyRoom}>
+                <View style={styles.studyRoomHeader}>
+                    <View>
+                        {studyRoom.studyroomState === "pending" ?
+                            <Image source={require('./img/status_waiting.png')}
+                                   style={styles.statusButton}/>
+                            : <Image source={require('./img/status_progressing.png')}
+                                     style={styles.statusButton}/>}
+                    </View>
+                    <Text style={styles.studyroomTitle}> {studyRoom.studyroomTitle} </Text>
                 </View>
 
                 <View style={styles.studyRoomContent}>
-                    <Text className="title"> {studyRoom.studyroomTitle} </Text>
-                    <View className="detail">
-                        <Text>{studyRoom.studyroomMaxUser} / 4</Text>
+                    <View style={styles.table}>
+                        <View style={styles.tablebody}>
+                            <View style={styles.tablecell}>
+                                <Text style={styles.tableLabel}>참여인원</Text>
+                                <Text style={styles.tableTextStrong}>
+                                    {studyRoom.studyroomMaxUser}
+                                    <Text style={styles.tableText}> / 4</Text>
+                                </Text>
 
-                        <Text>{studyRoom.studyroomTime} m</Text>
-                        <Text>Lv.{studyRoom.studyroomMinLevel}</Text>
+                            </View>
+                            <View style={styles.tablecell}>
+                                <Text style={styles.tableLabel}>진행시간</Text>
+                                <Text style={styles.tableTextStrong}>{studyRoom.studyroomTime}
+                                    <Text style={styles.tableText}>m</Text>
+                                </Text>
 
-                        {/*<table>*/}
-                        {/*<thead>*/}
-                        {/*<tr>*/}
-                        {/*<th>참여인원</th>*/}
-                        {/*<th className="MinLevel">진행시간</th>*/}
-                        {/*<th>입장레벨</th>*/}
-                        {/*</tr>*/}
-                        {/*</thead>*/}
-                        {/*<tbody>*/}
-                        {/*<tr>*/}
-                        {/*<td className="MaxUser">*/}
-                        {/*<strong>{studyRoom.studyroomMaxUser}</strong> / 4*/}
-                        {/*</td>*/}
-                        {/*<td className="MinLevel">*/}
-                        {/*<strong>{studyRoom.studyroomTime}</strong> m*/}
-                        {/*</td>*/}
-                        {/*<td className="Time">*/}
-                        {/*Lv.<strong>{studyRoom.studyroomMinLevel}</strong>*/}
-                        {/*<img src={require('./img/ic-arrow.png')} className="up-arrow" alt=""/>*/}
-                        {/*</td>*/}
-                        {/*</tr>*/}
-                        {/*</tbody>*/}
-                        {/*</table>*/}
+                            </View>
+                            <View style={[styles.tablecell, styles.tablecellLast]}>
+                                <Text style={styles.tableLabel}>입장레벨</Text>
+                                <Text style={styles.tableTextStrong}>
+                                    <Text style={styles.tableText}>Lv.</Text>
+                                    {studyRoom.studyroomMinLevel}
+                                    <Image source={require('./img/ic-arrow.png')}
+                                           style={styles.levelArrow}/>
+                                </Text>
+
+                            </View>
+                        </View>
                     </View>
-                    {/*{(studyRoom.studyroomState === "pending" ?*/}
-                    {/*<NavLink exact*/}
-                    {/*to={{pathname: '/study/' + studyRoom.categoryID + "/" + studyRoom.studyroomID}}>*/}
-                    {/*<button>*/}
-                    {/*<img src={require('./img/button-in.png')} className="Button_In" alt=""/>*/}
-                    {/*</button>*/}
-                    {/*</NavLink>*/}
-                    {/*:*/}
-                    {/*<NavLink exact*/}
-                    {/*to={{pathname: '/study/' + studyRoom.categoryID + "/" + studyRoom.studyroomID}}>*/}
-                    {/*<button>*/}
-                    {/*<img src={require('./img/button-ban.png')} className="Button_In Button_In_Ban"*/}
-                    {/*alt=""/>*/}
-                    {/*</button>*/}
-                    {/*</NavLink>*/}
+                    <View>
+                        {studyRoom.studyroomState === "pending" ?
+                            <Image source={require('./img/button_next_category_active.png')}
+                                   style={{width: 24, height: 24, marginTop: 20, marginLeft: 90}}/>
+                            : <Image source={require('./img/button_next_category.png')}
+                                     style={{width: 24, height: 24, marginTop: 20, marginLeft: 90}}/>}
+                    </View>
 
-                    {/*)}*/}
                 </View>
 
-            </View>
+            </TouchableOpacity>
         );
 
         return (
             <View style={styles.container}>
 
-                <Modal  style = {styles.modal}
-                        animationType = {"fade"} transparent = {true}
-                   visible = {this.state.modalShow}
-                   onRequestClose = {() => { console.log("Modal has been closed.") } }>
+                <Modal style={styles.modal}
+                       animationType={"fade"} transparent={true}
+                       visible={this.state.modalShow}
+                       onRequestClose={() => {
+                           console.log("Modal has been closed.")
+                       }}>
 
-                    <View style = {styles.modalMain}>
+                    <View style={styles.modalMain}>
 
-                        <Text style = {styles.modalTitle}>스터디룸 개설</Text>
+                        <Text style={styles.modalTitle}>스터디룸 개설</Text>
                         <TouchableOpacity onPress={this.hideModal}>
                             <Image source={require('./img/close-button.png')}
-                                 style = {styles.closeModalButton}/>
+                                   style={styles.closeModalButton}/>
                         </TouchableOpacity>
 
-                        <View style = {styles.inputGroup}>
-                            <Text style = {styles.inputGroupType}>방 제목</Text>
-                            <TextInput style = {styles.inputGroupContent}
-                                   placeholder="방 제목 입력"
-                                   onChange={(e) => {
-                                       let studyRoomInfo = {...this.state.studyRoomInfo};
-                                       studyRoomInfo.studyroomTitle = e.target.value;
-                                       this.setState({studyRoomInfo});
-                                   }}/>
+                        <View style={styles.inputGroup}>
+                            <Text style={styles.inputGroupType}>방 제목</Text>
+                            <TextInput style={styles.inputGroupContent}
+                                       placeholder="방 제목 입력"
+                                       onChange={(e) => {
+                                           let studyRoomInfo = {...this.state.studyRoomInfo};
+                                           studyRoomInfo.studyroomTitle = e.target.value;
+                                           this.setState({studyRoomInfo});
+                                       }}/>
                         </View>
-                        <View style = {styles.inputGroup}>
-                            <Text style = {styles.inputGroupType}>입장제한 레벨</Text>
-                            <TextInput style = {[styles.inputGroupContent,styles.inputGroupContentSM]}
+                        <View style={styles.inputGroup}>
+                            <Text style={styles.inputGroupType}>입장제한 레벨</Text>
+                            <TextInput style={[styles.inputGroupContent, styles.inputGroupContentSM]}
                                        placeholder="Lv.(예시: 3)"
                                        onChange={(e) => {
                                            let studyRoomInfo = {...this.state.studyRoomInfo};
                                            studyRoomInfo.studyroomMinLevel = e.target.value;
                                            this.setState({studyRoomInfo});
-                                       }}/><Text style = {styles.leveldesc}>이상 입장 가능</Text>
+                                       }}/><Text style={styles.leveldesc}>이상 입장 가능</Text>
                         </View>
 
                         {/*<div className="input-group">*/}
-                            {/*<div className="type">스터디 진행 시간</div>*/}
-                            {/*<div className="Time">*/}
-                                {/*<button*/}
-                                    {/*onClick={() => {*/}
-                                        {/*this.setState({studyroomTime: 15});*/}
-                                        {/*console.log(this.state.studyroomTime);*/}
-                                    {/*}}*/}
-                                    {/*className={this.state.studyroomTime === 15 ? "Button_Time_1 active" : "Button_Time_1"}>*/}
-                                    {/*15m*/}
-                                {/*</button>*/}
-                                {/*<button*/}
-                                    {/*onClick={() => {*/}
-                                        {/*this.setState({studyroomTime: 30});*/}
-                                        {/*console.log(this.state.studyroomTime);*/}
-                                    {/*}}*/}
-                                    {/*className={this.state.studyroomTime === 30 ? "Button_Time_2 active" : "Button_Time_2"}>*/}
-                                    {/*30m*/}
-                                {/*</button>*/}
-                                {/*<button*/}
-                                    {/*onClick={() => {*/}
-                                        {/*this.setState({studyroomTime: 45});*/}
-                                        {/*console.log(this.state.studyroomTime);*/}
-                                    {/*}}*/}
-                                    {/*className={this.state.studyroomTime === 45 ? "Button_Time_3 active" : "Button_Time_3"}>*/}
-                                    {/*45m*/}
-                                {/*</button>*/}
+                        {/*<div className="type">스터디 진행 시간</div>*/}
+                        {/*<div className="Time">*/}
+                        {/*<button*/}
+                        {/*onClick={() => {*/}
+                        {/*this.setState({studyroomTime: 15});*/}
+                        {/*console.log(this.state.studyroomTime);*/}
+                        {/*}}*/}
+                        {/*className={this.state.studyroomTime === 15 ? "Button_Time_1 active" : "Button_Time_1"}>*/}
+                        {/*15m*/}
+                        {/*</button>*/}
+                        {/*<button*/}
+                        {/*onClick={() => {*/}
+                        {/*this.setState({studyroomTime: 30});*/}
+                        {/*console.log(this.state.studyroomTime);*/}
+                        {/*}}*/}
+                        {/*className={this.state.studyroomTime === 30 ? "Button_Time_2 active" : "Button_Time_2"}>*/}
+                        {/*30m*/}
+                        {/*</button>*/}
+                        {/*<button*/}
+                        {/*onClick={() => {*/}
+                        {/*this.setState({studyroomTime: 45});*/}
+                        {/*console.log(this.state.studyroomTime);*/}
+                        {/*}}*/}
+                        {/*className={this.state.studyroomTime === 45 ? "Button_Time_3 active" : "Button_Time_3"}>*/}
+                        {/*45m*/}
+                        {/*</button>*/}
 
-                            {/*</div>*/}
+                        {/*</div>*/}
                         {/*</div>*/}
                         {/*<div className="input-group">*/}
-                            {/*<div className="type">최대 인원</div>*/}
-                            {/*<div className="MaxUser">*/}
-                                {/*<button*/}
-                                    {/*onClick={() => {*/}
-                                        {/*this.setState({studyroomMaxUser: 15});*/}
-                                        {/*console.log(this.state.studyroomMaxUser);*/}
-                                    {/*}}*/}
-                                    {/*className={this.state.studyroomMaxUser === 15 ? "Button_MaxUser_1 active" : "Button_MaxUser_1"}>*/}
-                                    {/*2명*/}
-                                {/*</button>*/}
-                                {/*<button*/}
-                                    {/*onClick={() => {*/}
-                                        {/*this.setState({studyroomMaxUser: 30});*/}
-                                        {/*console.log(this.state.studyroomMaxUser);*/}
-                                    {/*}}*/}
-                                    {/*className={this.state.studyroomMaxUser === 30 ? "Button_MaxUser_2 active" : "Button_MaxUser_2"}>*/}
-                                    {/*3명*/}
-                                {/*</button>*/}
-                                {/*<button*/}
-                                    {/*onClick={() => {*/}
-                                        {/*this.setState({studyroomMaxUser: 45});*/}
-                                        {/*console.log(this.state.studyroomMaxUser);*/}
-                                    {/*}}*/}
-                                    {/*className={this.state.studyroomMaxUser === 45 ? "Button_MaxUser_3 active" : "Button_MaxUser_3"}>*/}
-                                    {/*4명*/}
-                                {/*</button>*/}
-                            {/*</div>*/}
+                        {/*<div className="type">최대 인원</div>*/}
+                        {/*<div className="MaxUser">*/}
+                        {/*<button*/}
+                        {/*onClick={() => {*/}
+                        {/*this.setState({studyroomMaxUser: 15});*/}
+                        {/*console.log(this.state.studyroomMaxUser);*/}
+                        {/*}}*/}
+                        {/*className={this.state.studyroomMaxUser === 15 ? "Button_MaxUser_1 active" : "Button_MaxUser_1"}>*/}
+                        {/*2명*/}
+                        {/*</button>*/}
+                        {/*<button*/}
+                        {/*onClick={() => {*/}
+                        {/*this.setState({studyroomMaxUser: 30});*/}
+                        {/*console.log(this.state.studyroomMaxUser);*/}
+                        {/*}}*/}
+                        {/*className={this.state.studyroomMaxUser === 30 ? "Button_MaxUser_2 active" : "Button_MaxUser_2"}>*/}
+                        {/*3명*/}
+                        {/*</button>*/}
+                        {/*<button*/}
+                        {/*onClick={() => {*/}
+                        {/*this.setState({studyroomMaxUser: 45});*/}
+                        {/*console.log(this.state.studyroomMaxUser);*/}
+                        {/*}}*/}
+                        {/*className={this.state.studyroomMaxUser === 45 ? "Button_MaxUser_3 active" : "Button_MaxUser_3"}>*/}
+                        {/*4명*/}
+                        {/*</button>*/}
+                        {/*</div>*/}
                         {/*</div>*/}
 
                         {/*<button className="submit-button" onClick={modalSubmit}>완료</button>*/}
@@ -228,18 +247,19 @@ class StudyroomList extends React.Component {
                         : this.state.category.parentName + " > " + this.state.category.categoryName)}
                 </Text>
 
-                <TouchableOpacity onPress={()=>{this.showModal();}}>
-                    <Image source={require('./img/button-fab-plus.png')}
-                           style={styles.buttonPlus}/>
-                </TouchableOpacity>
-
                 <Text style={styles.listTitle}>스터디룸 리스트</Text>
 
                 <View style={styles.studyRoomList}>
                     <ScrollView>{listItems}</ScrollView>
                 </View>
 
-
+                <TouchableOpacity onPress={() => {
+                    this.showModal();
+                    console.log("Modal has been closed.");
+                }}>
+                    <Image source={require('./img/button-fab-plus.png')}
+                           style={styles.buttonPlus}/>
+                </TouchableOpacity>
 
             </View>
         );
@@ -249,48 +269,137 @@ class StudyroomList extends React.Component {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: "#ffffff",
+        paddingVertical: 28,
+        paddingHorizontal: 16,
+        height: '100%'
     },
     title: {
-        fontSize: 30
+        width: 74,
+        height: 21,
+        fontSize: 15,
+        fontWeight: "500",
+        fontStyle: "normal",
+        letterSpacing: -0.21,
+        color: "#4a4a4a",
+        marginBottom: 18
     },
     listTitle: {
-        fontSize: 20
+        width: 74,
+        height: 15,
+        fontSize: 10,
+        fontWeight: "500",
+        fontStyle: "normal",
+        letterSpacing: -0.14,
+        color: "#888888",
+        marginBottom: 8
+
     },
     studyRoomList: {
         alignItems: 'center'
 
     },
     studyRoom: {
-        marginBottom: 30,
-        width: 280,
-        height: 325,
-        borderRadius: 8,
-        borderColor: '#e6e6e6',
+        width: 328,
+        height: 100,
+        borderRadius: 4,
+        backgroundColor: "#ffffff",
+        borderStyle: "solid",
         borderWidth: 1,
-    },
-    studyRoomHeader: {
-        backgroundColor: "#bdbdbd",
-    },
-    studyRoomActive: {
-        backgroundColor: "#ff6032"
+        borderColor: "rgba(155, 155, 155, 0.3)",
+        marginBottom: 10
 
     },
-    studyRoomState: {
-        color: "#ffffff"
+    studyRoomHeader: {
+        width: 328,
+        height: 40.8,
+        borderRadius: 4,
+        backgroundColor: "rgba(155, 155, 155, 0.1)",
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        // paddingVertical: 13,
+        // paddingHorizontal: 12
+    },
+    statusButton: {
+        width: 47,
+        height: 17,
+        marginRight: 10
+    },
+    studyroomTitle: {
+        width: 238,
+        height: 20,
+        fontSize: 14,
+        fontWeight: "500",
+        fontStyle: "normal",
+        letterSpacing: -0.2,
+        color: "#4a4a4a"
     },
     studyRoomContent: {
-        alignItems: 'center'
+        flexDirection: 'row'
+
     },
     buttonPlus: {
         width: 75,
-        height: 75
+        height: 75,
+        position: 'absolute',
+        bottom: 40,
+        right: 0
+    },
+    table: {
+      marginTop: 12.1,
+        marginLeft: 9
+    },
+    tableheader: {
+        flexDirection: 'row'
+    },
+    tablebody: {
+        flexDirection: 'row'
+    },
+    tablecell: {
+        flexDirection: 'column',
+        width: 61.8,
+        borderRightWidth: 1,
+        borderRightColor: '#e0e0e0',
+    },
+    tablecellLast: {
+        borderRightWidth: 0
+    },
+    tableLabel: {
+        height: 15,
+        fontSize: 10,
+        fontWeight: "500",
+        fontStyle: "normal",
+        letterSpacing: -0.17,
+        textAlign: "center",
+        color: "#aeaeae",
+    },
+    tableTextStrong: {
+        fontSize: 13,
+        fontWeight: "500",
+        fontStyle: "normal",
+        letterSpacing: -0.49,
+        textAlign: "center",
+        color: "#ff6032",
+        height: 19,
+
+    },
+    tableText: {
+        color: '#9b9b9b',
+        fontSize: 11,
+    },
+    levelArrow: {
+        width: 7,
+        height: 10,
     },
     //MODAL
     modal: {
-        flex:1,
-        flexDirection:'row',
-        alignItems:'center',
-        justifyContent:'center',
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'absolute',
+        paddingHorizontal: '50%',
+        paddingVertical: '50%'
     },
     modalMain: {
         width: 300,
@@ -309,20 +418,14 @@ const styles = StyleSheet.create({
         fontSize: 30
 
     },
-    inputGroup: {
-
-    },
-    inputGroupType: {
-
-    },
+    inputGroup: {},
+    inputGroupType: {},
     inputGroupContent: {
         borderRadius: 8,
         borderColor: '#e6e6e6',
         borderWidth: 1,
     },
-    inputGroupContentSM: {
-
-    }
+    inputGroupContentSM: {}
 
 });
 
